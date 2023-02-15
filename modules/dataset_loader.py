@@ -4,9 +4,11 @@ import shutil
 from os import sys 
 from keras.preprocessing.image import ImageDataGenerator
 # from create_dataset import create_separate_dataset
-from create_dataset import create_separate_dataset
 
+import create_dataset
 
+# train = create_dataset.create_separate_dataset('train')
+# print(train)
 def load_dataset():
     
     targetx = 224
@@ -24,19 +26,19 @@ def load_dataset():
     
     generator_functions = {
         'train': datagen.flow_from_directory(
-                                            directory = create_separate_dataset('train'),
+                                            directory = create_dataset.create_separate_dataset('train'),
                                             target_size=(targetx, targety),
                                             batch_size=batch_size,
                                             shuffle=True,
                                             class_mode='sparse'),
         'val': datagen.flow_from_directory(
-                                            directory = create_separate_dataset('val'),
+                                            directory = create_dataset.create_separate_dataset('val'),
                                             target_size=(targetx, targety),
                                             batch_size=batch_size,
                                             class_mode='sparse',
                                             shuffle=True),
         'test': datagen.flow_from_directory(
-                                            directory = create_separate_dataset('test'),
+                                            directory = create_dataset.create_separate_dataset('test'),
                                             target_size=(targetx, targety),
                                             batch_size=batch_size,
                                             shuffle=True,
@@ -46,14 +48,6 @@ def load_dataset():
     }
 
     return generator_functions
-
-# def get_generator(dataset_type):
-#     generator_functions = load_dataset()
-#     try:
-#         generator = generator_functions[dataset_type]
-#     except KeyError:
-#         raise ValueError(f"Invalid dataset type: {dataset_type}. Must be 'train', 'val' or 'test'")
-#     return  generator
 
 def get_generator_functions():
     return load_dataset()

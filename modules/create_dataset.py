@@ -6,15 +6,21 @@ import glob
 
 
 
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+# def resource_path(relative_path):
+#     # try:
+#     #     base_path = sys._MEIPASS
+#     # except Exception:
+#     #     base_path = os.path.abspath(".")
 
-    return os.path.join(base_path, relative_path)
+#     # return os.path.abspath(relative_path)
+#     return os.path.abspath(os.path.join(os.getcwd(), '..'))
 
-def create_separate_dataset(diretory):
+def resource_path(resource_path):
+    current_dir = os.path.abspath(os.getcwd())
+    parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+    return os.path.join(parent_dir, resource_path)
+
+def create_separate_dataset(directory_name):
 
     # Set the source directory
     src_dir = resource_path("PlantVillage_Tomate\\")
@@ -27,10 +33,18 @@ def create_separate_dataset(diretory):
 
     # Check if the destination directories already exist
     if os.path.exists(train_dir) and os.path.exists(test_dir) and os.path.exists(val_dir):
-        print("Destination directories already exist:")
-        print("Train directory:", train_dir)
-        print("Test directory:", test_dir)
-        print("Validation directory:", val_dir)
+        # print("Destination directories already exist:")
+        if directory_name == 'train':
+            return train_dir 
+        elif directory_name == 'test':           
+            return  test_dir
+        elif directory_name == 'val':  
+            return val_dir
+            
+        raise ValueError("Invalid directory name. Allowed values are 'train', 'test', and 'val'.")
+        # print("Train directory:", train_dir)
+        # print("Test directory:", test_dir)
+        # print("Validation directory:", val_dir)
 
     else:
         # Set the split ratios for training, test, and validation sets
@@ -88,13 +102,19 @@ def create_separate_dataset(diretory):
                 dst = os.path.join(val_folder_path, "val_" + str(i) + ".jpg")
                 shutil.copy(src, dst)
 
-    if diretory == 'train':
+    
+    if directory_name == 'train':
         return train_dir 
-
-    elif diretory == 'test':           
+    elif directory_name == 'test':           
         return  test_dir
-
-    elif diretory == 'val':  
+    elif directory_name == 'val':  
         return val_dir
         
-    raise Exception("Especifique um conjunto válido")                   
+    raise ValueError("Invalid directory name. Allowed values are 'train', 'test', and 'val'.")
+
+
+# treino = create_separate_dataset('train')
+
+# # print(type(create_separate_dataset()))
+# print(treino)
+
